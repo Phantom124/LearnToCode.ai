@@ -1,35 +1,53 @@
-> *This document serves as a template for you to write **setup** instructions for your project.* 
-
-> Depending on the scale/complexity of your project, it may prove beneficial to have a **Python/Batch/Bash** script in the `scripts/` directory which *automatically sets-up* the project.
-
 # Setup Instructions
 
-Follow the steps below to set up and run the project. (Example)
+Follow the steps below to set up and run the project.
 
 ---
 
 ## 📦 Requirements
 ``` c
-// TODO: List software, runtimes, frameworks, and or dependencies
-// along with instructions on how to set each up.
-```
-- Example: Node.js v18+
-- Example: Python 3.10
-- Example: Docker
+Node.js v18+
+MySQL or MariaDB server
+npm (Node Package Manager)
+(Optional) MySQL Workbench for database management
 
 ---
 
 ## ⚙️ Installation
 ``` bash
 # Clone the repository
-git clone <your-repo-url>
-cd <repo-name>
+git clone https://github.com/Phantom124/LearnToCode.ai.git
+cd <LearnToCode.ai>
 
 # Install dependencies
-<insert command here>
+npm install
+```
+##🗄️ Database Setup
+```c
+# Start your MySQL/MariaDB server
+
+# Log in to MySQL and create the database
+mysql -u root -p
+# In the MySQL prompt, run:
+CREATE DATABASE learntocode;
+EXIT;
+```
+
+##📝 Environment Variables
+```c
+Create a .env file in the project root with the following content:
+
+API_KEY=your_gemini_api_key
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_USER=your_mysql_user
+DB_PASSWORD=your_mysql_password
+DB_NAME=learntocode
+PORT=3000
 ```
 
 ## ▶️ Running the Project
 ``` bash
-<insert run command here> # Or an explanation on what to do
+# Start the backend server
+node src/backend/server.js
 ```
