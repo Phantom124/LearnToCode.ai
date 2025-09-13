@@ -182,12 +182,11 @@ header .logo img{
 
 .infinite-scroll-container::before {
   left: 0;
-  /* background: linear-gradient(to right, #f8fafc, transparent); */
 }
 
 .infinite-scroll-container::after {
   right: 0;
-  /* background: linear-gradient(to left, #f8fafc, transparent); */
+
 }
 
 .infinite-scroll-track {
