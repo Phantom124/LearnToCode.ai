@@ -6,9 +6,24 @@ class LevelContext {
     getLevel(){
         return this.state.level;
     }
+
+    incScoreBy(score){
+        this.state = this.state.incScoreBy(score);
+        return this.state;
+    }
+
+    getScore(){
+        return this.state.score;
+    }
+
 }
 
 class LevelState {
+    constructor(level, score){
+        this.level = level;
+        this.score = score;
+    }
+
     incScoreBy(score){
         if (score <= 0){
             return;
@@ -27,9 +42,7 @@ class LevelState {
 
 class BeginnerState extends LevelState {
     constructor(score) {
-        super();
-        this.level = 'Beginner';
-        this.score = score;
+        super('Beginner', score);
     }
 
     next(){
@@ -39,9 +52,7 @@ class BeginnerState extends LevelState {
 
 class IntermediateState extends LevelState {
     constructor(score) {
-        super();
-        this.level = 'Intermediate';
-        this.score = score;
+        super('Intermediate', score);
     }
 
     next(){
@@ -51,12 +62,18 @@ class IntermediateState extends LevelState {
 
 class AdvancedState extends LevelState {
     constructor(score) {
-        super();
-        this.level = 'Intermediate';
-        this.score = score;
+        super('Advanced', score);
     }
 
     next(){
         return new AdvancedState(this.score - 100);
     }
 }
+
+module.exports = {
+    LevelState,
+    BeginnerState,
+    IntermediateState,
+    AdvancedState,
+    LevelContext
+};
