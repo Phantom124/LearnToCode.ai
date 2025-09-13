@@ -17,3 +17,55 @@ response:
         "api_key" : "VFD45Yd4ddEd44ghhcs0"
     }
 }
+
+users/login
+request:
+{
+    "email" : "email@address.com",
+    "password" : "password"
+}
+response:
+{
+    "status" : "successful" or "unsuccessful"
+    "message" : "Login successful" / "Invalid credentials" or some other thing
+    "data" : {
+        "api_key" : "VFD45Yd4ddEd44ghhcs0"
+    }
+}
+
+users/get_profile
+request:
+{
+    "api_key" : "VFD45Yd4ddEd44ghhcs0"
+}   
+response:
+{
+    "status" : "successful" or "unsuccessful"
+    "message" : "Profile retrieved successfully" / "Invalid API key" or some other thing
+    "data" : {
+        "email" : "email@address.com",
+        "name" : "John",
+        "surname" : "Doe",
+        "user_level" : "Beginner"
+    }
+}   
+
+users/update_profile
+request:    
+{
+    "api_key" : "VFD45Yd4ddEd44ghhcs0",
+    "name" : "John",
+    "surname" : "Doe",
+    "user_level" : "Beginner"
+}
+response:
+{
+    "status" : "successful" or "unsuccessful"
+    "message" : "Profile updated successfully" / "Invalid API key" or some other thing
+    "data" : {
+        "email" : "email@address.com",
+        "name" : "John",
+        "surname" : "Doe",
+        "user_level" : "Beginner"
+    }
+}
