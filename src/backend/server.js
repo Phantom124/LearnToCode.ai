@@ -244,6 +244,65 @@ app.post('/users/update_profile', async (req, res) => {
     });
 });
 
+const { LevelContext, BeginnerState, IntermediateState, AdvancedState } = require('./levelState');
+const QuestionSetHandler = require('./questionHandler').default || require('./questionHandler');
+
+app.get('/questions/get', async (req, res) => {
+    try {
+        const { api_key, language } = req.body;
+
+        if (!(api_key && language)){
+            return res.status(400).json({
+                status : "unsuccessful",
+                message : "Missing parameters",
+                data : null
+            });
+        }
+
+        //first get the score from db and using that score, we can determine the level
+        let score = null;
+        db.query("SELECT score from users where api_key = ?", [api_key], async (err, result) => {
+            if (err || result.length === 0){
+                return res.status(400).json({
+                    status : "unsuccessful",
+                    message : "User not found.",
+                    data: null
+                });
+            }
+
+            score = result[0].score;
+            if (!score) score = 0;
+
+        });
+
+        let state = null;
+        if (score < 100){
+            state = new BeginnerState(score % 100);
+        } else if (score < 200) {
+            state = new IntermediateState(score % 100);
+        } else if (score < 300) {
+            state = new AdvancedState(score % 100);
+        }
+
+        context = new LevelContext(state, language); 
+        qsh = new QuestionSetHandler(context);
+        // questions = 
+
+        return res.status(200).json({
+            status : "successful",
+            message : "Questions generated successfully.",
+            data : await qsh.createQuestionSet(context)
+        });
+    } catch (e) {
+        console.log(e);
+        return res.status(500).json({ 
+            status: "unsuccessful", 
+            message: "Server error", 
+            data: null 
+        });
+    }
+});
+
 app.post('/external-data', async (req, res) => {
     try {
         const prompt = req.body.prompt;
