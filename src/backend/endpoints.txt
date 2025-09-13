@@ -69,3 +69,10 @@ response:
         "user_level" : "Beginner"
     }
 }
+
+SOCKET ENDPOINTS:
+
+Add things for:
+    - Connect
+    - Disconnect
+    - Update score
