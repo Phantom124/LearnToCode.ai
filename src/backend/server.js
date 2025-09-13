@@ -349,11 +349,22 @@ app.post('/users/mark_question', async(req, res) => {
                 data: null
             });
         }
-        return res.status(200).json({
-            status: "successful",
-            message: "Correct answer! Score updated.",
-            data: marking
+
+        //now we finna get all the scores and emit for the scoreboard
+        db.query('SELECT score, name, surname from users', (err2, out) => {
+            const io = req.app.get('io');
+            if (io){
+                io.emit('score_updated', out);
+            }
+            //remeber to add a way to keep track of which entry is the user -- idk if ill even remember what I meant by this tomorrow morning
+
+            return res.status(200).json({
+                status: "successful",
+                message: "Correct answer! Score updated.",
+                data: marking
+            });
         });
+        
     });
 });
 
@@ -400,18 +411,13 @@ const io = new Server(httpServer, {
     cors: { origin: "*" }
 });
 
+app.set('io', io);
+
 io.on('connection', (socket) => {  
     console.log('A user has connected: ', socket.id);
 
-    socket.on('update_score', ({ api_key, score }, callback) => {
-        db.query('UPDATE users SET score = ? WHERE api_key = ?', [score, api_key], (err, results) => {
-            if (err || results.affectedRows === 0){
-                callback({ status: "unsuccessful", message: "Score update failed" });
-            }
-            else{
-                callback({ status: "successful", message: "Score updated" });
-            }
-        });
+    socket.on('score_updated', (rows) => {
+        console.log('scoreboard:', rows);
     });
 
     socket.on('disconnect', () => {
