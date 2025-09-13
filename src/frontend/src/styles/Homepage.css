@@ -21,6 +21,7 @@ header .logo img{
 
 .hero {
     background: var(--bg-secondary);
+    animation: fadeInUp 1s ease;
 }
 
 .hero-content {
@@ -83,6 +84,18 @@ header .logo img{
 .how-it-works {
     margin-top: 40px;
 }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .how-it-works-content h1 {
     text-align: center;
 }
