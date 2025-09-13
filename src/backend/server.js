@@ -304,10 +304,12 @@ app.get('/questions/get', async (req, res) => {
 });
 
 // mark_question endpoint
-app.post('/users/mark_question', async(req, res) => {
-    const { api_key, question_id, user_answer, correct_answer, score_increment } = req.body;
+const MarkingHandler = require('./markingHandler');
 
-    if (!api_key || !question_id || !user_answer || !correct_answer || !score_increment){
+app.post('/users/mark_question', async(req, res) => {
+    const { api_key, question, user_answer, score_increment } = req.body;
+
+    if (!api_key || !question || !user_answer || !score_increment){
         return res.status(400).json({
             status: "unsuccessful",
             message: "Please input all required fields",
@@ -316,19 +318,31 @@ app.post('/users/mark_question', async(req, res) => {
     }
 
     // validate answer
-    const validate_answer = user_answer.trim().toLowerCase() === correct_answer.trim().toLowerCase();
+    const marker = new MarkingHandler();
+    let marking;
 
-    if (!validate_answer){
-        return res.status(200).json({
+    try{
+        marking = await marker.markQuestion(question, user_answer);
+    }catch (error){
+        return res.status(500).json({
             status: "unsuccessful",
-            message: "Incorrect answer",
+            message: "Error marking question",
             data: null
         });
     }
 
+    if (!marking.isCorrect) {
+        return res.status(200).json({
+            status: "unsuccessful",
+            message: "Incorrect answer",
+            data: marking
+        });
+    
+    }
+
     // update user score (correct = increase score)
-    db.query('UPDATE users SET score = score + ? WHERE api_key = ?', [score_increment, api_key], (err, results) => {
-        if (err || results.affectedRows === 0){
+    db.query('UPDATE users SET score = score + ? WHERE api_key = ?', [score_increment, api_key], (err, result) => {
+        if (err || result.affectedRows === 0) {
             return res.status(500).json({
                 status: "unsuccessful",
                 message: "Could not update score",
@@ -338,9 +352,7 @@ app.post('/users/mark_question', async(req, res) => {
         return res.status(200).json({
             status: "successful",
             message: "Correct answer! Score updated.",
-            data: {
-                correct: true
-            }
+            data: marking
         });
     });
 });
@@ -383,6 +395,7 @@ app.get('/', (req, res) => {
 
 const httpServer = http.createServer(app);
 const { Server } = require('socket.io');
+// const { use } = require('react');
 const io = new Server(httpServer, {
     cors: { origin: "*" }
 });
