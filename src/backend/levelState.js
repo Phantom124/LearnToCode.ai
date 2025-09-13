@@ -44,7 +44,7 @@ class LevelState {
             return;
         }
         this.score += score;
-        if (this.score >= 100) {
+        if (this.level !== 'Advanced' || this.score >= 100) {
             return this.next();
         }
         return this;
