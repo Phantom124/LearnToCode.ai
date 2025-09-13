@@ -74,7 +74,6 @@ questions/get_questions
 request:
 {
     api_key : "VFD45Yd4ddEd44ghhcs0",
-    level : "Beginner",
     language : "Python"
 }
 response:
