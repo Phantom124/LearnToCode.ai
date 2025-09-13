@@ -8,6 +8,14 @@ const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 
+const http = require('http');
+const { Server } = require('socket.io');
+
+const server = http.createServer(app);
+const io = new Server(server, {
+    cors: { origin: '*' } // tighten for production
+});
+
 const api_key = process.env.API_KEY;
 const gemini_url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
@@ -130,6 +138,19 @@ app.get('/', (req, res) => {
     res.send('Welcome to LearnToCode.ai');
 });
 
-app.listen(PORT, () => {
+io.on('connection', (socket) => {
+    console.log('a user connected:', socket.id);
+
+    socket.on('disconnect', () => {
+        console.log('user disconnected:', socket.id);
+    });
+});
+
+
+// app.listen(PORT, () => {
+//     console.log(`Server running on http://localhost:${PORT}`);
+// });
+
+server.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
