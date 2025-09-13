@@ -1,6 +1,7 @@
 class LevelContext {
-    constructor(state = new BeginnerState(0)){
+    constructor(state = new BeginnerState(0), language){
         this.state = state;
+        this.language = language;
     }
 
     getLevel(){
@@ -14,6 +15,20 @@ class LevelContext {
 
     getScore(){
         return this.state.score;
+    }
+
+    setLanguage(newLang, newState = new BeginnerState(0)){
+        if (this.language === newLang){
+            return this.state;
+        }
+
+        this.language = newLang;
+        this.state = newState;
+        return this.state;
+    }
+
+    getLanguage(){  
+        return this.language;
     }
 
 }
