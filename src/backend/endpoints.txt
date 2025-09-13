@@ -70,7 +70,7 @@ response:
     }
 }
 
-questions/get_question
+questions/get_questions
 request:
 {
     api_key : "VFD45Yd4ddEd44ghhcs0",
