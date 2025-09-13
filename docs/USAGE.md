@@ -1,35 +1,38 @@
-> *This document serves as a template for you to write **usage** instructions for your project.* 
-
 # Usage Guide
 
 ## ▶️ Running the Application
-``` c
-// TODO: Explain how to launch the project.
-// Add commands or steps here.
-```
 ``` bash
-# Example
-npm start
+# Start the backend server
+node src/backend/server.js
 ```
 
 ## 🖥️ How to Use
-``` c
-// TODO: Provide step-by-step usage instructions for judges/users.
-```
-1. Step 1 -> Do this
-2. Step 2 -> Then this
-3. Step 3 -> See the output/result
+
+1.Ensure your MySQL server is running and the database is created.
+
+2.Start the backend server using the command above.
+
+3.Use Postman or a similar tool to interact with the API endpoints:
+
+    -Signup: POST to http://localhost:3000/users/signup
+    -Login: POST to http://localhost:3000/users/login
+    -Get Profile: POST to http://localhost:3000/users/get_profile
+    -Update Profile: POST to http://localhost:3000/users/update_profile
+    
+4.Provide the required JSON body for each endpoint as shown in the API documentation or earlier examples.
+
+5.Check responses in Postman or your frontend application.
 
 ## 🎥 Demo
-``` c
-// TODO: Link your demo video and PowerPoint here
-```
+
 Check out the Demos: 
 - [Demo Video](../demo/demo.mp4)
 - [Demo Presentation](../demo/demo.pptx)
 
 ## 📌 Notes
 ``` c
-// TODO: Add any special instructions, caveats, or tips
-// for using your project.
+Make sure your .env file is correctly configured in the project root.
+The server will automatically create the users table if it does not exist.
+If you encounter database connection errors, verify your MySQL credentials and that the database exists.
+For real-time features, ensure your frontend uses Socket.IO to connect to the backend.
 ```
