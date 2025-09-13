@@ -18,4 +18,4 @@ UNIVERSITY OF PRETORIA
 ```
 
 ## 📧 Other Contact Info
-- GitHub Repo: [<https://github.com/user-name/repo-name>](https://github.com/Phantom124/LearnToCode.ai.git)
+- GitHub Repo: https://github.com/Phantom124/LearnToCode.ai.git
