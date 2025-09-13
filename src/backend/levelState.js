@@ -14,7 +14,9 @@ class LevelContext {
     }
 
     getScore(){
-        return this.state.score;
+        multiple = this.state.level === 'Beginner' ? 0 : this.state.level === 'Intermediate' ? 1 : 2;
+        output = this.state.score + multiple * 100;
+        return output;
     }
 
     setLanguage(newLang, newState = new BeginnerState(0)){
