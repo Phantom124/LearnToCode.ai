@@ -303,6 +303,48 @@ app.get('/questions/get', async (req, res) => {
     }
 });
 
+// mark_question endpoint
+app.post('/users/mark_question', async(req, res) => {
+    const { api_key, question_id, user_answer, correct_answer, score_increment } = req.body;
+
+    if (!api_key || !question_id || !user_answer || !correct_answer || !score_increment){
+        return res.status(400).json({
+            status: "unsuccessful",
+            message: "Please input all required fields",
+            data: null
+        });
+    }
+
+    // validate answer
+    const validate_answer = user_answer.trim().toLowerCase() === correct_answer.trim().toLowerCase();
+
+    if (!validate_answer){
+        return res.status(200).json({
+            status: "unsuccessful",
+            message: "Incorrect answer",
+            data: null
+        });
+    }
+
+    // update user score (correct = increase score)
+    db.query('UPDATE users SET score = score + ? WHERE api_key = ?', [score_increment, api_key], (err, results) => {
+        if (err || results.affectedRows === 0){
+            return res.status(500).json({
+                status: "unsuccessful",
+                message: "Could not update score",
+                data: null
+            });
+        }
+        return res.status(200).json({
+            status: "successful",
+            message: "Correct answer! Score updated.",
+            data: {
+                correct: true
+            }
+        });
+    });
+});
+
 app.post('/external-data', async (req, res) => {
     try {
         const prompt = req.body.prompt;
