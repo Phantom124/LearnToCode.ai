@@ -1,0 +1,53 @@
+.practice {
+  display: flex;
+  gap: 1rem; 
+}
+
+.practice section {
+  flex: 1;
+  margin-top: 20px;
+}
+
+.practice-title {
+    text-align: center;
+}
+
+.language-selection {
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.language-selection label {
+    font-weight: 500;
+    min-width: 120px;
+}
+
+.selected-language-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 40px;
+}
+
+.language-selection select {
+    cursor: pointer;
+    padding-inline: 6px;
+}
+
+.language-selection select option{
+    cursor: pointer;
+
+}
+
+.language-selection select:focus {
+    border-color: var(--clr-purple-500);
+}
+
+.selected-language-logo img {
+    height: 40px;
+    width: 40px;
+    object-fit: contain;
+}
