@@ -5,7 +5,7 @@ const app = express();
 const PORT = 3000;
 const axios = require('axios');
 
-const api_key = 'AIzaSyBvhOyH5ns__FwflCWhIOKHN79iutRrsp8';
+const api_key = process.env.api_key;
 const gemini_url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
 app.use(express.json());
@@ -43,6 +43,3 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
-
-
-
