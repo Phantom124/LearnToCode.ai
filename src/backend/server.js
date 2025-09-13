@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const express = require('express');
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const axios = require('axios');
 const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
@@ -15,6 +15,7 @@ const gemini_url = 'https://generativelanguage.googleapis.com/v1beta/models/gemi
 // mysql connection
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME
