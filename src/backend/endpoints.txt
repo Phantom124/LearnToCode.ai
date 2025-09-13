@@ -70,6 +70,140 @@ response:
     }
 }
 
+questions/get_question
+request:
+{
+    api_key : "VFD45Yd4ddEd44ghhcs0",
+    level : "Beginner",
+    language : "Python"
+}
+response:
+{
+    "status" : "successful" or "unsuccessful"
+    "message" : "Question retrieved successfully" / "Invalid API key" or some other thing
+    "data" : {
+    "userLevel": "beginner",
+    "questions": [
+        {
+        "id": 1,
+        "type": "multiple-choice",
+        "topic": "Variables and Data Types",
+        "question": "Which of the following is a correct way to declare an integer variable named `age` and assign it a value of $25$ in Python?",
+        "options": [
+            "A. int age = 25;",
+            "B. age = 25;",
+            "C. var age = 25;",
+            "D. const age = 25;"
+        ],
+        "answer": "B",
+        "explanation": "In Python, you do not need to explicitly declare the data type of a variable. The interpreter automatically infers the type from the assigned value."
+        },
+        {
+        "id": 2,
+        "type": "fill-in-the-blank",
+        "topic": "Control Flow",
+        "question": "A loop that continues to execute as long as a specified condition is true is called a `__` loop.",
+        "answer": "while",
+        "explanation": "A `while` loop repeatedly executes a block of code as long as its condition remains true. It's often used when the number of iterations is not known beforehand."
+        },
+        {
+        "id": 3,
+        "type": "coding",
+        "topic": "Basic Operations",
+        "question": "Write a Python function named `multiply_by_five` that takes one integer argument, `number`, and returns the product of this number and $5$.",
+        "starterCode": {
+            "Python": "def multiply_by_five(number):\n    # Your code here"
+        },
+        "testCases": [
+            {
+            "input": "4",
+            "expectedOutput": "20"
+            },
+            {
+            "input": "7",
+            "expectedOutput": "35"
+            }
+        ],
+        "explanation": "This problem tests the fundamental concepts of defining a function, passing arguments, performing a simple arithmetic operation, and returning a value."
+        },
+        {
+        "id": 4,
+        "type": "multiple-choice",
+        "topic": "Strings",
+        "question": "How do you correctly concatenate the strings `Hello` and `World` with a space in between?",
+        "options": [
+            "A. `Hello` + ` ` + `World`",
+            "B. `Hello` + `World`",
+            "C. `Hello, ` + `World`",
+            "D. `Hello` - `World`"
+        ],
+        "answer": "A",
+        "explanation": "The `+` operator is commonly used to combine or concatenate strings. To include a space between the words, you must explicitly add a string containing a space."
+        },
+        {
+        "id": 5,
+        "type": "fill-in-the-blank",
+        "topic": "Data Structures",
+        "question": "A data structure that stores a collection of elements in a specific order and allows duplicate values is called a(n) `__`.",
+        "answer": "array",
+        "explanation": "An array (or list in some languages like Python) is a linear data structure that holds a collection of elements, each identified by an index or key, and allows for duplicates."
+        },
+        {
+        "id": 6,
+        "type": "coding",
+        "topic": "Conditional Statements",
+        "question": "Write a Python program that takes a number as input and prints `Even` if the number is even, and `Odd` if the number is odd.",
+        "starterCode": {
+            "Python": "number = int(input('Enter a number: '))\n# Your code here"
+        },
+        "testCases": [
+            {
+            "input": "4",
+            "expectedOutput": "Even"
+            },
+            {
+            "input": "7",
+            "expectedOutput": "Odd"
+            }
+        ],
+        "explanation": "This problem requires using the modulo operator (`%`) to check for a remainder when the number is divided by $2$, and then using an `if-else` statement to print the correct result."
+        },
+        {
+        "id": 7,
+        "type": "multiple-choice",
+        "topic": "Basic Concepts",
+        "question": "What is the correct term for the process of converting a high-level programming language code into machine code?",
+        "options": [
+            "A. Decoding",
+            "B. Compiling",
+            "C. Debugging",
+            "D. Executing"
+        ],
+        "answer": "B",
+        "explanation": "Compiling is the process of translating source code written in a high-level language into machine code or bytecode that a computer can understand and run."
+        }
+    ]
+    }
+}
+
+questions/submit_answer
+request:
+{
+    "api_key" : "VFD45Yd4ddEd44ghhcs0",
+    "question": {},  <-- the question object from get_question,
+    "selectedOption": "A" or "while" or code string etc,
+}
+response:
+{
+    "status" : "successful" or "unsuccessful"
+    "message" : "Answer submitted successfully" / "Invalid API key" or some other thing
+    "data" : {
+        "correct": true or false,
+        "explanation": "The correct answer is B because..." or "Your code passed all test cases!" etc,
+        "num_marks": 5
+    }
+}
+
 SOCKET ENDPOINTS:
 
 Add things for:
