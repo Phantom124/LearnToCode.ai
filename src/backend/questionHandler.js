@@ -1,6 +1,6 @@
-import dotenv from "dotenv";
-import { GoogleGenAI } from "@google/genai";
-import { LevelContext, BeginnerState, IntermediateState, AdvancedState } from './levelState.js';
+const dotenv = require("dotenv");
+const { GoogleGenAI } = require("@google/genai");
+const { LevelContext, BeginnerState, IntermediateState, AdvancedState } = require('./levelState');
 
 dotenv.config();
 
@@ -66,4 +66,4 @@ class QuestionSetHandler {
     }
 }
 
-export default QuestionSetHandler;
+module.exports = QuestionSetHandler;

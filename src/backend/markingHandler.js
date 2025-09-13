@@ -1,5 +1,5 @@
-import dotenv from 'dotenv';
-import { GoogleGenAI } from '@google/genai';
+const dotenv = require("dotenv");
+const { GoogleGenAI } = require("@google/genai");
 
 dotenv.config();
 
@@ -21,7 +21,8 @@ class MarkingHandler{
         -Provide a brief explanation.
         -Provide a score out of 1 (1 being correct, 0 being incorrect).
         
-        Also return your response as JSON: { "isCorrect": true/false, "score": 1/0, "feedback": "..." }`;
+        Please respond ONLY with a JSON object like:
+        {"isCorrect": true/false, "score": 1/0, "feedback": "..."}`;
 
         try{
             const response = await this.genAI.models.generateContent({
@@ -35,9 +36,15 @@ class MarkingHandler{
             });
 
             let marking;
-            try{
-                marking = JSON.parse(response.text);
-            }catch (e){
+            try {
+                let raw = response.text.trim();
+                // Remove Markdown code block if present
+                if (raw.startsWith('```')) {
+                    raw = raw.replace(/```json|```/g, '').trim();
+                }
+                console.log("AI cleaned response:", raw);
+                marking = JSON.parse(raw);
+            } catch (e) {
                 marking = {
                     isCorrect: false,
                     score: 0,
@@ -55,4 +62,4 @@ class MarkingHandler{
 }
 
 
-export default MarkingHandler;
+module.exports = MarkingHandler;
