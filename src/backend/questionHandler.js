@@ -5,13 +5,14 @@ import { LevelContext, BeginnerState, IntermediateState, AdvancedState } from '.
 dotenv.config();
 
 class QuestionSetHandler {
-    constructor() {
+    constructor(stateContext = new LevelContext()) {
+        this.stateContext = stateContext;
         this.genAI = new GoogleGenAI({ apiKey: process.env.API_KEY });
     }
 
-    async createQuestionSet(stateContext = new LevelContext()) {
-        const userLevel = stateContext.getLevel();
-        const language = stateContext.getLanguage();
+    async createQuestionSet() {
+        const userLevel = this.stateContext.getLevel();
+        const language = this.stateContext.getLanguage();
 
         const prompt = `Please generate a set of more than 5 but less than 11 coding questions for the ${language} programming language on a ${userLevel} level with some of them being multiple choice questions, others fill in the blank questions, and others being coding questions. The format of multiple choice questions should be as follows: {
             "id": 1,
