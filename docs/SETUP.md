@@ -17,7 +17,7 @@ npm (Node Package Manager)
 ``` bash
 # Clone the repository
 git clone https://github.com/Phantom124/LearnToCode.ai.git
-cd <LearnToCode.ai>
+cd LearnToCode.ai
 
 # Install dependencies
 npm install
