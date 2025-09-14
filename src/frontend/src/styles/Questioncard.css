@@ -100,3 +100,15 @@
 .submit-button:hover {
   background-color: var(--clr-purple-600);
 }
+
+.option-button.selected-answer {
+  border-color: var(--clr-purple-500);
+  background-color: var(--clr-purple-50);
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.1);
+  transform: translateY(-1px);
+}
+
+.option-button.selected-answer:hover {
+  background-color: var(--clr-purple-50);
+  border-color: var(--clr-purple-500);
+}

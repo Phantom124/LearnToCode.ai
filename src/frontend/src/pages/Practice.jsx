@@ -1,5 +1,6 @@
 import Sidebar from "../components/Sidebar";
 import { useState, useEffect } from "react";
+import ClipLoader from "react-spinners/ClipLoader";
 
 
 import c from "../../../../assets/icons8-c.svg"
@@ -17,7 +18,9 @@ import Timer from "../components/Timer";
 
 const Practice = () => {
 
+    const [index, setIndex] = useState(0);
     
+    const [loading, setLoading] = useState(false);
     const [gameState, setGameState] = useState("start");
 
     const languages = [
@@ -30,90 +33,22 @@ const Practice = () => {
         {id:7 , name: "Java", logo: <img src={java} alt="Java logo" /> },
     ];
 
+    const handleIncrement = () => {
+        setIndex((i) => {
+        const next = i + 1;
+        if (next >= questions.length) {
+        setGameState("end");
+        return i; 
+        }
+        return next;
+    });
+    };
+
 
     const [languageId, setLanguageId] = useState(1);
 
     const selectedLang = languages.find(lang => lang.id === languageId);
     
-    const questionss = [
-        {
-            "id": 1,
-            "type": "multiple-choice",
-            "question": "Which of the following is the correct way to declare a pointer in C++?",
-            "options": [
-            "int p;",
-            "int *p;",
-            "int &p;",
-            "pointer int p;"
-            ],
-            "answer": "int *p;"
-        },
-        {
-            "id": 3,
-            "type": "write-code",
-            "question": "Write a C++ program that prints 'Hello World' to the console."
-        },
-        {
-            "id": 2,
-            "type": "fill-in-the-blank",
-            "question": "In C++, the keyword used to define a constant variable is ______.",
-            "answer": "const"
-        },
-        
-        
-        {
-            "id": 4,
-            "type": "fill-in-the-blank",
-            "question": "In C++, the operator used to allocate memory dynamically is ______.",
-            "answer": "new"
-        },
-        {
-            "id": 5,
-            "type": "multiple-choice",
-            "question": "Which of these is NOT a valid C++ data type?",
-            "options": [
-            "int",
-            "float",
-            "real",
-            "double"
-            ],
-            "answer": "real"
-        },
-        {
-            "id": 6,
-            "type": "write-code",
-            "question": "Write a C++ function that takes two integers and returns their sum."
-        },
-        {
-            "id": 7,
-            "type": "fill-in-the-blank",
-            "question": "The process of creating multiple functions with the same name but different parameters is called ______.",
-            "answer": "function overloading"
-        },
-        {
-            "id": 8,
-            "type": "multiple-choice",
-            "question": "What is the correct syntax to include the iostream library?",
-            "options": [
-            "#include <iostream>",
-            "#include iostream",
-            "import iostream",
-            "#include (iostream)"
-            ],
-            "answer": "#include <iostream>"
-        },
-        {
-            "id": 9,
-            "type": "write-code",
-            "question": "Write a C++ class named 'Book' with two member variables: title and author, both strings. Provide a constructor to initialize them."
-        },
-        {
-            "id": 10,
-            "type": "fill-in-the-blank",
-            "question": "In C++, the destructor of a class has the same name as the class but is preceded by the symbol ______.",
-            "answer": "~"
-        }
-    ]
     
     const [questions, setQuestions] = useState([]);
 
@@ -125,9 +60,60 @@ const Practice = () => {
     // setSelectedAnswer(null);
   };
   const getQuestions = () => {
-    let q = questionss; // place holder for when i make api call
+    // let q = questionss; // place holder for when i make api call
     setQuestions(q);
   }
+
+  useEffect(() => {
+  const langName = languages.find(lang => lang.id === languageId)?.name;
+
+  setLoading(true);
+  fetch("/api/questions/get", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      api_key: "b994e7f382b4f6678af8fa3894a34f20",
+      language: langName,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Data from API:", data);
+
+      let cleanData = data.data;
+
+      if (typeof cleanData === "string") {
+        try {
+          cleanData = cleanData
+            .replace(/```json/g, "")
+            .replace(/```/g, "")
+            .trim();
+          cleanData = JSON.parse(cleanData);
+        } catch (err) {
+          console.error("Failed to parse JSON string from API:", err);
+          cleanData = [];
+        }
+      }
+
+      setQuestions(cleanData);
+    })
+    .catch((error) => {
+      console.error("Error fetching questions:", error);
+      setQuestions([]);
+    }).finally(() => {
+        setLoading(false); // 🔹 unblock
+      });
+  }, [languageId]);
+
+
+  console.log("howdy" + questions)
 
     return (
         <div className="practice">
@@ -155,13 +141,28 @@ const Practice = () => {
 
                 {gameState === "start" && <Start onStart={() => {
                     handleStart();
-                    getQuestions();
                     }}/>
                 }
 
-                {gameState === "playing" && <QuestionCard question={questions[0]}/>
+                {gameState === "playing" && questions[index] && (
+                    <QuestionCard
+                        question={questions[index]}
+                        qNumber={index + 1}
+                        total={questions.length}
+                        onNext={handleIncrement}
+                    />
+                )}
 
-                }
+                {/* {gameState === "end" && <GameOver/>} */}
+
+                {loading && (
+                <div className="loader-container">
+                    <p>AI Loading, give me about 20 seconds...</p>
+                    <ClipLoader size={40} color="#000" />
+                </div>
+                )}
+
+                
                 
             </section>
         </div>
