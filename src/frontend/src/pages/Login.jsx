@@ -28,7 +28,7 @@ const Login = () => {
             if (data.status === "successful") {
                 // Save api_key if needed
                 localStorage.setItem('api_key', data.data.api_key);
-                navigate('/dashboard');
+                navigate('/practice');
             } else {
                 setErrors({ general: data.message || "Login failed" });
             }
