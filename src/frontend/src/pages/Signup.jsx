@@ -1,13 +1,17 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Signup = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        fullName: '',
+        firstName: '',
+        lastName: '',
         email: '',
         password: '',
         confirmPassword: '',
-        agreeTerms: false
+        agreeTerms: false,
+        userLevel: 'Beginner'
     });
     
     const [errors, setErrors] = useState({});
@@ -24,10 +28,14 @@ const Signup = () => {
     const validate = () => {
         const newErrors = {};
         
-        if (!formData.fullName.trim()) {
-            newErrors.fullName = 'Full name is required';
+        if (!formData.firstName.trim()) {
+            newErrors.firstName = 'First name is required';
         }
         
+        if (!formData.lastName.trim()) {
+            newErrors.lastName = 'First name is required';
+        }
+
         if (!formData.email) {
             newErrors.email = 'Email is required';
         } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -51,10 +59,53 @@ const Signup = () => {
         return newErrors;
     };
 
-    const handleSubmit = (e) => {
+    // set cookie (expires in days)
+    function setCookie(name, value, days = 2) {
+        const expires = new Date(Date.now() + days * 864e5).toUTCString();
+        document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}; Path=/; Expires=${expires}; SameSite=Lax; Secure`;
+    }
+
+    // read cookie
+    function getCookie(name) {
+    return document.cookie.split('; ').reduce((acc, pair) => {
+        const [k, v] = pair.split('=');
+        return k === encodeURIComponent(name) ? decodeURIComponent(v) : acc;
+    }, null);
+    }
+
+    // delete cookie
+    function deleteCookie(name) {
+        document.cookie = `${encodeURIComponent(name)}=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax; Secure`;
+    }
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const newErrors = validate();
-        
+        setErrors(newErrors);
+        if (Object.keys(newErrors).length) return;
+
+        try{
+
+            const payload = {
+                email: formData.email,
+                password: formData.password,
+                name: formData.firstName,
+                surname: formData.lastName,
+                user_level: formData.userLevel
+            }
+
+            const res = await axios.post('http://localhost:3000/users/signup', payload);
+            // console.log(res.data);
+            const api_key = res?.data?.data?.api_key; 
+
+            setCookie('api_key', api_key);
+            
+            navigate('/dashboard');
+        } catch (err) {
+            setErrors({ form: err.message || 'Network error' });
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -68,17 +119,31 @@ const Signup = () => {
                     
                     <form onSubmit={handleSubmit} className="signup-form">
                         <div className="form-group">
-                            <label htmlFor="fullName">Full Name</label>
+                            <label htmlFor="firstName">First Name</label>
                             <input
                                 type="text"
-                                id="fullName"
-                                name="fullName"
-                                value={formData.fullName}
+                                id="firstName"
+                                name="firstName"
+                                value={formData.firstName}
                                 onChange={handleChange}
-                                className={errors.fullName ? 'error' : ''}
-                                placeholder="Your full name"
+                                className={errors.firstName ? 'error' : ''}
+                                placeholder="Your first name"
                             />
-                            {errors.fullName && <span className="error-message">{errors.fullName}</span>}
+                            {errors.firstName && <span className="error-message">{errors.firstName}</span>}
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="lastName">Last Name</label>
+                            <input
+                                type="text"
+                                id="lastName"
+                                name="lastName"
+                                value={formData.lastName}
+                                onChange={handleChange}
+                                className={errors.lastName ? 'error' : ''}
+                                placeholder="Your last name"
+                            />
+                            {errors.lastName && <span className="error-message">{errors.lastName}</span>}
                         </div>
                         
                         <div className="form-group">
@@ -121,6 +186,24 @@ const Signup = () => {
                                 placeholder="Confirm your password"
                             />
                             {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="userLevel">How would you describe your level in programming?</label>
+
+                            <select
+                                id="userLevel"
+                                name="userLevel"
+                                value={formData.userLevel}
+                                onChange={handleChange}
+                                className={errors.userLevel ? 'error' : ''}>
+
+                                <option value="Beginner">Beginner</option>
+                                <option value="Intermediate">Intermediate</option>
+                                <option value="Advanced">Advanced</option>
+                            </select>
+
+                            {errors.userLevel && <span className="error-message">{errors.userLevel}</span>}
                         </div>
                         
                         <div className="terms-checkbox">
