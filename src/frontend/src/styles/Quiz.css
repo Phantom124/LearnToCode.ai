@@ -1,0 +1,33 @@
+.quiz-page {
+  display: flex;
+  min-height: 100vh;
+}
+
+.quiz-content {
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.quiz-container {
+  max-width: 800px;
+  width: 100%;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.quiz-game {
+  padding: 2rem;
+}
+
+.quiz-score {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--clr-gray-700);
+}

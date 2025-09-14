@@ -1,0 +1,20 @@
+.timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 1.5rem; 
+  font-weight: bold;
+  color: #374151; 
+  margin-bottom: 2rem;
+}
+
+.timer-icon {
+  width: 24px;  
+  height: 24px; 
+}
+
+.timer-text {
+  font-size: inherit;
+  font-weight: inherit;
+}

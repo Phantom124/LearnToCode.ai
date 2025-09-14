@@ -1,0 +1,200 @@
+@layer reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  /* https://kilianvalkhof.com/2022/css-html/your-css-reset-needs-text-size-adjust-probably/ */
+  html {
+    -moz-text-size-adjust: none;
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+  }
+
+  body,
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  figure,
+  blockquote,
+  dl,
+  dd {
+    margin: 0;
+  }
+
+  /* https://www.scottohara.me/blog/2019/01/12/lists-and-safari.html */
+  [role="list"] {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    min-block-size: 100vh;
+    line-height: 1.6;
+  }
+
+  h1,
+  h2,
+  h3,
+  button,
+  input,
+  label {
+    line-height: 1.1;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p,
+  li {
+    text-wrap: pretty;
+  }
+
+  img,
+  picture {
+    max-inline-size: 100%;
+    display: block;
+  }
+
+  input,
+  button,
+  textarea,
+  select {
+    font: inherit;
+  }
+}
+
+@layer base {
+  :root {
+    /* Brand Colors */
+    --clr-brand-primary: hsl(262, 83%, 58%); /* #7C3AED - main purple */
+    --clr-brand-secondary: hsl(210, 40%, 8%); /* #0F172A - dark gray */
+    
+    /* Neutral Colors */
+    --clr-white: hsl(0, 0%, 100%);
+    --clr-gray-50: hsl(210, 40%, 98%);
+    --clr-gray-100: hsl(210, 40%, 96%);
+    --clr-gray-200: hsl(214, 32%, 91%);
+    --clr-gray-300: hsl(213, 27%, 84%);
+    --clr-gray-400: hsl(215, 20%, 65%);
+    --clr-gray-500: hsl(215, 16%, 47%);
+    --clr-gray-600: hsl(215, 19%, 35%);
+    --clr-gray-700: hsl(215, 25%, 27%);
+    --clr-gray-800: hsl(217, 33%, 17%);
+    --clr-gray-900: var(--clr-brand-secondary);
+    
+    /* Purple Variations */
+    --clr-purple-50: hsl(262, 83%, 97%);
+    --clr-purple-100: hsl(262, 83%, 94%);
+    --clr-purple-200: hsl(262, 83%, 87%);
+    --clr-purple-300: hsl(262, 83%, 78%);
+    --clr-purple-400: hsl(262, 83%, 68%);
+    --clr-purple-500: var(--clr-brand-primary);
+    --clr-purple-600: hsl(262, 83%, 48%);
+    --clr-purple-700: hsl(262, 83%, 38%);
+    --clr-purple-800: hsl(262, 83%, 28%);
+    --clr-purple-900: hsl(262, 83%, 18%);
+
+    /* Typography */
+    --ff-heading: "Inter", system-ui, sans-serif;
+    --ff-body: "Inter", system-ui, sans-serif;
+    --ff-mono: "JetBrains Mono", "Fira Code", monospace;
+
+    /* Font Sizes */
+    --fs-xs: 0.75rem;
+    --fs-sm: 0.875rem;
+    --fs-base: 1rem;
+    --fs-lg: 1.125rem;
+    --fs-xl: 1.25rem;
+    --fs-2xl: 1.5rem;
+    --fs-3xl: 1.875rem;
+    --fs-4xl: 2.25rem;
+    --fs-5xl: 3rem;
+
+    @media (width > 768px) {
+      --fs-xs: 0.75rem;
+      --fs-sm: 0.875rem;
+      --fs-base: 1rem;
+      --fs-lg: 1.25rem;
+      --fs-xl: 1.5rem;
+      --fs-2xl: 2rem;
+      --fs-3xl: 2.5rem;
+      --fs-4xl: 3.5rem;
+      --fs-5xl: 4.5rem;
+    }
+  }
+
+  /* Semantic Color Variables */
+  :root {
+    --text-primary: var(--clr-gray-900);
+    --text-secondary: var(--clr-gray-600);
+    --text-muted: var(--clr-gray-400);
+    --text-inverse: var(--clr-white);
+    --text-brand: var(--clr-purple-500);
+    
+    --bg-primary: var(--clr-white);
+    --bg-secondary: var(--clr-gray-50);
+    --bg-muted: var(--clr-gray-100);
+    --bg-brand: var(--clr-purple-500);
+    --bg-brand-light: var(--clr-purple-50);
+    
+    --border-default: var(--clr-gray-200);
+    --border-muted: var(--clr-gray-100);
+    --border-brand: var(--clr-purple-200);
+    
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 4px 16px rgba(0, 0, 0, 0.1);
+    
+    --radius-sm: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+
+    --font-size-sm: var(--fs-sm);
+    --font-size-regular: var(--fs-base);
+    --font-size-md: var(--fs-lg);
+    --font-size-lg: var(--fs-xl);
+  }
+}
+
+@layer base {
+    body {
+        font-family: var(--ff-body);
+        font-size: var(--font-size-regular);
+        color: var(--text-primary);
+        background-color: var(--bg-primary);
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+        font-family: var(--ff-heading);
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+
+    a {
+        color: var(--text-primary);
+        text-decoration: none;
+    }
+
+    a:hover,
+    a:focus-visible {
+        color: var(--text-brand);
+    }
+
+    img {
+        border-radius: var(--radius-xl);
+  }
+}
