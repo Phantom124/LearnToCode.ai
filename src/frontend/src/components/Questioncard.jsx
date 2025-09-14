@@ -2,6 +2,14 @@ import { useState, useEffect } from "react";
 import "../styles/Questioncard.css";
 
 const QuestionCard = ({ question, qNumber, total, onNext}) => {
+
+    function getCookie(name) {
+    return document.cookie.split('; ').reduce((acc, pair) => {
+        const [k, v] = pair.split('=');
+        return k === encodeURIComponent(name) ? decodeURIComponent(v) : acc;
+    }, null);
+    }
+
     if (!question) return <div>Loading question...</div>;
     const [multipleAnswer, setMultiple] = useState({id: null, answer: null});
     const [blankAnswer, setBlank] = useState({id: null,answer: ""});
@@ -24,7 +32,7 @@ const QuestionCard = ({ question, qNumber, total, onNext}) => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        api_key: "b994e7f382b4f6678af8fa3894a34f20",
+        api_key: getCookie("api_key"),
         question: question.question,
         user_answer: correctAnswer.answer,
         score_increment: 1,
