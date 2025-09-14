@@ -5,7 +5,6 @@ import { NavLink, useLocation } from 'react-router-dom';
 const Sidebar = () => {
 
     const menuItems = [
-        { id: 'dashboard', label: 'Overview', path: '/dashboard' },
         { id: 'test', label: 'Practice', path: '/practice' },
         { id: 'leaderboard', label: 'Leaderboard',  path: '/leaderboard' },
         

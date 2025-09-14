@@ -44,7 +44,7 @@ const Practice = () => {
         setIndex((i) => {
         const next = i + 1;
         if (next >= questions.length) {
-        setGameState("end");
+        setGameState("start");
         return i; 
         }
         return next;
