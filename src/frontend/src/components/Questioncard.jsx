@@ -1,7 +1,17 @@
 import { useState, useEffect } from "react";
 import "../styles/Questioncard.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const QuestionCard = ({ question, qNumber, total, onNext}) => {
+
+    function getCookie(name) {
+    return document.cookie.split('; ').reduce((acc, pair) => {
+        const [k, v] = pair.split('=');
+        return k === encodeURIComponent(name) ? decodeURIComponent(v) : acc;
+    }, null);
+    }
+
     if (!question) return <div>Loading question...</div>;
     const [multipleAnswer, setMultiple] = useState({id: null, answer: null});
     const [blankAnswer, setBlank] = useState({id: null,answer: ""});
@@ -19,29 +29,39 @@ const QuestionCard = ({ question, qNumber, total, onNext}) => {
     }, [codeAnswer]);
 
     const handleGrade = async (correctAnswer) => {
-  try {
-    const res = await fetch("/api/users/mark_question", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        api_key: "b994e7f382b4f6678af8fa3894a34f20",
-        question: question.question,
-        user_answer: correctAnswer.answer,
-        score_increment: 1,
-      }),
-    });
+    try {
+        const res = await fetch("/api/users/mark_question", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            api_key: getCookie("api_key"),
+            question: question.question,
+            user_answer: correctAnswer.answer,
+            score_increment: 1,
+        }),
+        });
 
-    if (!res.ok) {
-      throw new Error("Network response was not ok");
+        if (!res.ok) {
+        throw new Error("Network response was not ok");
+        }
+
+        const data = await res.json();
+        console.log("Marked question response:", data);
+        
+        if (data.data.isCorrect) {
+        toast.success("Correct!", { autoClose: 2000 });
+      } else {
+        toast.error(`${data.feedback || "Incorrect answer"}`, {
+          autoClose: 3000,
+        });
+      }
+        
+        
+        return data;
+    } catch (err) {
+        console.error("Error marking question:", err);
     }
-
-    const data = await res.json();
-    console.log("Marked question response:", data);
-    return data;
-  } catch (err) {
-    console.error("Error marking question:", err);
-  }
-};
+    };
 
 
     const getActiveAnswer = () => {
@@ -119,6 +139,7 @@ const QuestionCard = ({ question, qNumber, total, onNext}) => {
         </button>
 
       </div>
+      <ToastContainer position="top-center" />
     </div>
     );
 };
