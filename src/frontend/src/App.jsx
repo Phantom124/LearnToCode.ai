@@ -7,6 +7,10 @@ import './styles/Login.css'
 import './styles/Signup.css'
 import './styles/Sidebar.css'
 import './styles/Practice.css'
+import './styles/Start.css'
+import "./styles/Timer.css"
+import "./styles/Gameover.css"
+import "./styles/Questioncard.css"
 import Homepage from './pages/Homepage'
 import Login from './pages/Login'
 import Signup from './pages/Signup'

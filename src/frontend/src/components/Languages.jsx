@@ -9,7 +9,7 @@ import java from "../../../../assets/icons8-java.svg"
 
 const Languages = () => {
     const languages = [
-        { name: "C", logo: <img src={c} alt="C logo" /> },
+        { name: "C++", logo: <img src={c} alt="C++ logo" /> },
         { name: "Python", logo: <img src={python} alt="Python logo" /> },
         { name: "JavaScript", logo: <img src={JavaScript} alt="JavaScript logo" /> },
         { name: "C#", logo: <img src={CSharp} alt="C# logo" /> },
