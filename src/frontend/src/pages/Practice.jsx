@@ -130,6 +130,7 @@ const Practice = () => {
                 <div className="language-selection">
                     <label htmlFor="language-type">Select Language</label>
                     <select
+                        data-game-state={gameState}
                         onChange={(e) => setLanguageId(Number(e.target.value))}
                         name="language-type"
                         value={languageId}
