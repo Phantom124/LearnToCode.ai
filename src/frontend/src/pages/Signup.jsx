@@ -75,11 +75,14 @@ const Signup = () => {
             }
 
             const res = await axios.post('http://localhost:3000/users/signup', payload);
-            console.log(res);
+            console.log(res.data);
+            const api_key = res?.data?.data?.api_key; 
+            
+            navigate('/dashboard');
         } catch (err) {
             setErrors({ form: err.message || 'Network error' });
         } finally {
-            setIsSubmitting(true);
+            setIsSubmitting(false);
         }
     };
 
