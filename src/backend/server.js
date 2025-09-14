@@ -274,7 +274,7 @@ app.get('/leaderboard/get', async (req, res) => {
 const { LevelContext, BeginnerState, IntermediateState, AdvancedState } = require('./levelState');
 const QuestionSetHandler = require('./questionHandler').default || require('./questionHandler');
 
-app.get('/questions/get', async (req, res) => {
+app.post('/questions/get', async (req, res) => {
     try {
         const { api_key, language } = req.body;
 
@@ -435,7 +435,7 @@ const httpServer = http.createServer(app);
 const { Server } = require('socket.io');
 // const { use } = require('react');
 const io = new Server(httpServer, {
-    cors: { origin: "*" }
+    cors: { origin: "*", methods: ['GET', 'POST'] }
 });
 
 app.set('io', io);
