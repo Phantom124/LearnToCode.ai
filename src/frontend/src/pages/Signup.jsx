@@ -100,7 +100,7 @@ const Signup = () => {
 
             setCookie('api_key', api_key);
             
-            navigate('/dashboard');
+            navigate('/practice');
         } catch (err) {
             setErrors({ form: err.message || 'Network error' });
         } finally {
