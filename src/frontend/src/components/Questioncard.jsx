@@ -1,56 +1,126 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../styles/Questioncard.css";
 
-const QuestionCard = ({ question }) => {
-  if (!question) return <div>Loading question...</div>;
-  const [multipleAnswer, setMultiple] = useState(null);
-  return (
-    <div className="question-card">
-      <h2 className="question-title">Question #{question.id}</h2>
-      <p className="question-text">{question.question}</p>
+const QuestionCard = ({ question, qNumber, total, onNext}) => {
+    if (!question) return <div>Loading question...</div>;
+    const [multipleAnswer, setMultiple] = useState({id: null, answer: null});
+    const [blankAnswer, setBlank] = useState({id: null,answer: ""});
+    const [codeAnswer, setCode] = useState({id:null,answer:""});
 
-      {question.type === "multiple-choice" && (
-        <div className="options">
-          {question.options.map((option, index) => (
-            <button
-              key={index}
-              className="option-button"
-              onClick={()=> {setMultiple(index+1)}}
-            >
-              <div className="option-content">
-                <span>{option}</span>
-              </div>
-              {console.log("mult is" + multipleAnswer)}
-            </button>
-          ))}
-        </div>
-      )}
+    const [isSubmitting, setSubmitting] = useState(false);
 
-      {question.type === "fill-in-the-blank" && (
-        <div className="fill-blank">
-          <input 
-            type="text"
-            placeholder="Type your answer here"
-            className="answer-input"
-          />
-        </div>
-      )}
+    //just testing
+    useEffect(() => {
+        console.log("Curr: ", blankAnswer);
+    }, [blankAnswer]);
 
-      {question.type === "write-code" && (
-        <div className="code-editor-container">
-          <textarea
-            className="code-editor"
-            placeholder="Write your code here..."
-            rows={8}
-          ></textarea>
-        </div>
-      )}
+    useEffect(() => {
+        console.log("Code: ", codeAnswer);
+    }, [codeAnswer]);
 
-      <div className="question-actions">
-        <button className="submit-button">Submit Answer</button>
+    const handleGrade = async (correctAnswer) => {
+  try {
+    const res = await fetch("/api/users/mark_question", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: "b994e7f382b4f6678af8fa3894a34f20",
+        question: question.question,
+        user_answer: correctAnswer.answer,
+        score_increment: 1,
+      }),
+    });
+
+    if (!res.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const data = await res.json();
+    console.log("Marked question response:", data);
+    return data;
+  } catch (err) {
+    console.error("Error marking question:", err);
+  }
+};
+
+
+    const getActiveAnswer = () => {
+        if (multipleAnswer.id !== null) return multipleAnswer;
+        if (blankAnswer.id !== null && blankAnswer.answer !== "") return blankAnswer;
+        if (codeAnswer.id !== null && codeAnswer.answer !== "") return codeAnswer;
+        return null;
+    };
+
+    const [isLoading, setLoader] = useState(false);
+
+    useEffect
+
+    return (
+        <div className="question-card">
+        <h2 className="question-title">Question #{qNumber}{total ? ` of ${total}` : ""}</h2>
+        <p className="question-text">{question.question}</p>
+
+        {question.type === "multiple-choice" && (
+            
+            <div className="options">
+            {question.options.map((option, index) => (
+                <button
+                key={index}
+                className={`option-button ${multipleAnswer?.answer === index + 1 ? "selected-answer" : ""}`}
+                onClick={()=> {setMultiple({id: question.id,answer: index+1}); setBlank({id: null, answer:""}); setCode({id:null, answer:""});}}
+                >
+                <div className="option-content">
+                    <span>{option}</span>
+                </div>
+                {console.log("mult is" + multipleAnswer.answer)}
+                </button>
+            ))}
+            </div>
+        )}
+
+        {question.type === "fill-in-the-blank" && (
+            <div className="fill-blank">
+            <input 
+                type="text"
+                placeholder="Type your answer here"
+                className="answer-input"
+                value={blankAnswer.answer}
+                onChange={(e) => {setBlank({id: question.id,answer: e.target.value}); setCode({id:null, answer:""}); setMultiple({id:null, answer:null});}}
+            />
+            </div>
+        )}
+
+        {question.type === "coding" && (
+            <div className="code-editor-container">
+            <textarea
+                className="code-editor"
+                placeholder="Write your code here..."
+                rows={8}
+                value={codeAnswer.answer || ""} 
+                onChange={(e) => {setCode({id: question.id,answer: e.target.value}), setBlank({id:null,answer:""}); setMultiple({id:null,answer:null});}} 
+            />
+            </div>
+        )}
+
+        <div className="question-actions">
+        <button
+        className="submit-button"
+        disabled={isSubmitting}
+        onClick={async () => {
+            const active = getActiveAnswer?.();
+            if (!active) return;
+            setSubmitting(true);
+            await handleGrade(active);
+            setSubmitting(false);
+            onNext();
+        }}
+        >
+        {isSubmitting ? "Submitting..." : "Submit Answer"}
+        </button>
+
       </div>
     </div>
-  );
+    );
 };
 
 export default QuestionCard;
