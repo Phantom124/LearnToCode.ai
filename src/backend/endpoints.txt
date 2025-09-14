@@ -1,0 +1,19 @@
+Endpoints:
+
+users/signup
+request: 
+{
+    "email" : "email@address.com",
+    "password" : "password", <-- will be hashed on the backend
+    "name" : "John",
+    "surname" : "Doe",
+    "user_level" : "Beginner"
+}
+response:
+{
+    "status" : "successful" or "unsuccessful"
+    "message" : "Account created successfully" / "User already exists" or some other thing
+    "data" : {
+        "api_key" : "VFD45Yd4ddEd44ghhcs0"
+    }
+}
