@@ -18,7 +18,7 @@ const Leaderboard = () => {
                 const res = await axios.get('http://localhost:3000/leaderboard/get');
                 const data = res.data?.data ?? res.data ?? [];
 
-                console.log(res.data);
+                // console.log(res.data);
 
                 if (mounted) setRows(Array.isArray(data) ? data : []);
             } catch (e) {
@@ -30,27 +30,28 @@ const Leaderboard = () => {
         return () => { mounted = false; };
     }, []);
 
-    // const socketRef = useSocket({ url: "http://localhost:3000", auth: apiKey });
+    const socketRef = useSocket({ url: "http://localhost:3000"});
 
-    // useEffect(() => {
-    //     const socket = socketRef.current;
-    //     if (!socket) return;
+    useEffect(() => {
+        const socket = socketRef.current;
+        if (!socket) return;
 
-    //     const onUpdate = (payload) => {
-    //         // adjust according to payload shape
-    //         if (Array.isArray(payload)) setRows(payload);
-    //         else {
-    //             setRows(prev => {
-    //                 const i = prev.findIndex(r => r.api_key === payload.api_key);
-    //                 if (i === -1) return [payload, ...prev];
-    //                 const next = [...prev]; next[i] = { ...next[i], ...payload }; return next;
-    //             });
-    //         }
-    //     };
+        const onUpdate = (payload) => {
+            // adjust according to payload shape
+            console.log(payload);
+            if (Array.isArray(payload)) setRows(payload);
+            else {
+                setRows(prev => {
+                    const i = prev.findIndex(r => r.api_key === payload.api_key);
+                    if (i === -1) return [payload, ...prev];
+                    const next = [...prev]; next[i] = { ...next[i], ...payload }; return next;
+                });
+            }
+        };
 
-    //     socket.on("scoreUpdated", onUpdate);
-    //     return () => socket.off("scoreUpdated", onUpdate);
-    // }, [socketRef]);
+        socket.on("score_updated", onUpdate);
+        return () => socket.off("scoreUpdated", onUpdate);
+    }, [socketRef]);
 
     return (
         <div className="leaderboard-page">
@@ -67,10 +68,10 @@ const Leaderboard = () => {
                     {rows.map((row, i) => (
                         <div className="leaderboard-row" key={row.id ?? row.api_key ?? i}>
                             <div className="rank">{i + 1}</div>
-                            <div className="user">
+                            {/* <div className="user"> */}
                                 <div className="name">{(row.name ?? `${row.firstName ?? ''} ${row.lastName ?? ''}`.trim()) || 'Unknown'}</div>
                                 <div className="score">{row.score ?? 0}</div>
-                            </div>
+                            {/* </div> */}
                         </div>
                     ))}
                 </div>

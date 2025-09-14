@@ -19,6 +19,7 @@
     border-radius: 12px;
     display: flex;
     flex-direction: row;
+    justify-content: space-around;
     width: 100%;
     padding: 15px;
 
@@ -48,21 +49,9 @@
   gap: 20px;
 }
 
-.rank {
-    flex: 2;
-}
-
-.top-user {
-    display: flex;
-    padding: 25px;
-    background-color: rgb(255, 255, 255);
-    border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    justify-content: center;   
-}
-
+/* 
 .user {
     display: flex;
     justify-content: space-between;
     flex: 8;
-}
+} */
