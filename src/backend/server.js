@@ -8,6 +8,13 @@ const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const http = require('http');
+const cors = require('cors');
+
+app.use(cors({
+    origin: 'http://localhost:5173', // or '*' for development
+    methods: ['GET','POST','PUT','DELETE','OPTIONS'],
+    credentials: true // set true if you send cookies/auth
+}));
 
 const api_key = process.env.API_KEY;
 const gemini_url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
