@@ -1,0 +1,32 @@
+{
+  "name": "learntocode.ai",
+  "version": "1.0.0",
+  "description": "Welcome to the official **Hackathon Submission Template** for the **South African Intervarsity Hackathon 2025**! This repository is designed to help participants organize their project submissions in a **consistent, judge-friendly structure** while supporting any tech stack.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Phantom124/LearnToCode.ai.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Phantom124/LearnToCode.ai/issues"
+  },
+  "homepage": "https://github.com/Phantom124/LearnToCode.ai#readme",
+  "dependencies": {
+    "@google/genai": "^1.19.0",
+    "axios": "^1.12.1",
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "mysql2": "^3.14.5",
+    "socket.io": "^4.8.1"
+  }
+}
