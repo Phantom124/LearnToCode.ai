@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Signup = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -75,7 +76,7 @@ const Signup = () => {
             }
 
             const res = await axios.post('http://localhost:3000/users/signup', payload);
-            console.log(res.data);
+            // console.log(res.data);
             const api_key = res?.data?.data?.api_key; 
             
             navigate('/dashboard');
