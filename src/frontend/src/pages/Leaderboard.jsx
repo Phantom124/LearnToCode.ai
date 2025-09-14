@@ -1,5 +1,6 @@
 import axios from "axios";
 import Sidebar from "../components/Sidebar";
+import useSocket from "../hooks/useSocket";
 import "../styles/Leaderboard.css";
 import { useEffect, useState } from "react";
 
@@ -29,6 +30,28 @@ const Leaderboard = () => {
         return () => { mounted = false; };
     }, []);
 
+    const socketRef = useSocket({ url: "http://localhost:3000", auth: apiKey });
+
+    useEffect(() => {
+        const socket = socketRef.current;
+        if (!socket) return;
+
+        const onUpdate = (payload) => {
+            // adjust according to payload shape
+            if (Array.isArray(payload)) setRows(payload);
+            else {
+                setRows(prev => {
+                    const i = prev.findIndex(r => r.api_key === payload.api_key);
+                    if (i === -1) return [payload, ...prev];
+                    const next = [...prev]; next[i] = { ...next[i], ...payload }; return next;
+                });
+            }
+        };
+
+        socket.on("scoreUpdated", onUpdate);
+        return () => socket.off("scoreUpdated", onUpdate);
+    }, [socketRef]);
+
     return (
         <div className="leaderboard-page">
             <Sidebar/>
@@ -41,7 +64,6 @@ const Leaderboard = () => {
                         <div className="empty"><h3>No users to display</h3></div>
                     )}
 
-                    {/* dynamically render one div per row */}
                     {rows.map((row, i) => (
                         <div className="leaderboard-row" key={row.id ?? row.api_key ?? i}>
                             <div className="rank">{i + 1}</div>
