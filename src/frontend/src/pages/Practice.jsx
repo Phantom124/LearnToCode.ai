@@ -18,6 +18,13 @@ import Timer from "../components/Timer";
 
 const Practice = () => {
 
+    function getCookie(name) {
+    return document.cookie.split('; ').reduce((acc, pair) => {
+        const [k, v] = pair.split('=');
+        return k === encodeURIComponent(name) ? decodeURIComponent(v) : acc;
+    }, null);
+    }
+
     const [index, setIndex] = useState(0);
     
     const [loading, setLoading] = useState(false);
@@ -74,7 +81,7 @@ const Practice = () => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      api_key: "b994e7f382b4f6678af8fa3894a34f20",
+      api_key: getCookie("api_key"),
       language: langName,
     }),
   })
@@ -123,6 +130,7 @@ const Practice = () => {
                 <div className="language-selection">
                     <label htmlFor="language-type">Select Language</label>
                     <select
+                        data-game-state={gameState}
                         onChange={(e) => setLanguageId(Number(e.target.value))}
                         name="language-type"
                         value={languageId}
