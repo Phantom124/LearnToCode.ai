@@ -1,44 +1,42 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-const Login = () => {
+import { Link, useNavigate } from "react-router-dom";
 
-    const [formData, setFormData] = useState({
-        email: '',
-        password: '',
-        rememberMe: false
-    });
-    
+const Login = () => {
+    const [formData, setFormData] = useState({ email: '', password: '' });
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        setFormData({
-            ...formData,
-            [name]: type === 'checkbox' ? checked : value
-        });
-    };
-
-    const validate = () => {
-        const newErrors = {};
-        
-        if (!formData.email) {
-            newErrors.email = 'Email is required';
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = 'Email address is invalid';
-        }
-        
-        if (!formData.password) {
-            newErrors.password = 'Password is required';
-        }
-        
-        return newErrors;
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const newErrors = validate();
-    
+        setIsSubmitting(true);
+        setErrors({});
+
+        fetch('http://localhost:3000/users/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        })
+        .then(res => res.json())
+        .then(data => {
+            setIsSubmitting(false);
+            if (data.status === "successful") {
+                // Save api_key if needed
+                localStorage.setItem('api_key', data.data.api_key);
+                navigate('/dashboard');
+            } else {
+                setErrors({ general: data.message || "Login failed" });
+            }
+        })
+        .catch(() => {
+            setIsSubmitting(false);
+            setErrors({ general: "Server error. Please try again." });
+        });
     };
 
     return (
