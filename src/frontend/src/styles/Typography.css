@@ -96,9 +96,9 @@
     --clr-purple-100: hsl(262, 83%, 94%);
     --clr-purple-200: hsl(262, 83%, 87%);
     --clr-purple-300: hsl(262, 83%, 78%);
-    --clr-purple-400: hsl(262, 83%, 68%);
+    --clr-purple-400: #9b6af1ff;
     --clr-purple-500: var(--clr-brand-primary);
-    --clr-purple-600: hsl(262, 83%, 48%);
+    --clr-purple-600: #5f15e0ff;
     --clr-purple-700: hsl(262, 83%, 38%);
     --clr-purple-800: hsl(262, 83%, 28%);
     --clr-purple-900: hsl(262, 83%, 18%);
