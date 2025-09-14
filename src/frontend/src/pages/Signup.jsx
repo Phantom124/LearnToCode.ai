@@ -59,6 +59,25 @@ const Signup = () => {
         return newErrors;
     };
 
+    // set cookie (expires in days)
+    function setCookie(name, value, days = 2) {
+        const expires = new Date(Date.now() + days * 864e5).toUTCString();
+        document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}; Path=/; Expires=${expires}; SameSite=Lax; Secure`;
+    }
+
+    // read cookie
+    function getCookie(name) {
+    return document.cookie.split('; ').reduce((acc, pair) => {
+        const [k, v] = pair.split('=');
+        return k === encodeURIComponent(name) ? decodeURIComponent(v) : acc;
+    }, null);
+    }
+
+    // delete cookie
+    function deleteCookie(name) {
+        document.cookie = `${encodeURIComponent(name)}=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax; Secure`;
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const newErrors = validate();
@@ -78,6 +97,8 @@ const Signup = () => {
             const res = await axios.post('http://localhost:3000/users/signup', payload);
             // console.log(res.data);
             const api_key = res?.data?.data?.api_key; 
+
+            setCookie('api_key', api_key);
             
             navigate('/dashboard');
         } catch (err) {
