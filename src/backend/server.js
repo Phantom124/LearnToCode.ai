@@ -251,6 +251,26 @@ app.post('/users/update_profile', async (req, res) => {
     });
 });
 
+app.get('/leaderboard/get', async (req, res) => {
+    try {
+        
+        db.query('SELECT score, name, surname from users order by score desc', (err, out) => {
+            return res.status(200).json({
+                status: "successful",
+                message: "Leaderboard retrieved successful.",
+                data: out
+            });
+        });
+
+    } catch (e) {
+        res.status(500).json({
+            status: "unsuccessful", 
+            message: "Server error", 
+            data: null 
+        });
+    }
+});
+
 const { LevelContext, BeginnerState, IntermediateState, AdvancedState } = require('./levelState');
 const QuestionSetHandler = require('./questionHandler').default || require('./questionHandler');
 
@@ -357,8 +377,8 @@ app.post('/users/mark_question', async(req, res) => {
             });
         }
 
-        //now we finna get all the scores and emit for the scoreboard
-        db.query('SELECT score, name, surname from users', (err2, out) => {
+        //now we finna get all the scores and emit for the leaderboard
+        db.query('SELECT score, name, surname from users order by score desc', (err2, out) => {
             const io = req.app.get('io');
             if (io){
                 io.emit('score_updated', out);
