@@ -435,7 +435,7 @@ const httpServer = http.createServer(app);
 const { Server } = require('socket.io');
 // const { use } = require('react');
 const io = new Server(httpServer, {
-    cors: { origin: "*" }
+    cors: { origin: "*", methods: ['GET', 'POST'] }
 });
 
 app.set('io', io);
