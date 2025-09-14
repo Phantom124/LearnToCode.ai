@@ -247,7 +247,7 @@ app.post('/users/update_profile', async (req, res) => {
 const { LevelContext, BeginnerState, IntermediateState, AdvancedState } = require('./levelState');
 const QuestionSetHandler = require('./questionHandler').default || require('./questionHandler');
 
-app.get('/questions/get', async (req, res) => {
+app.post('/questions/get', async (req, res) => {
     try {
         const { api_key, language } = req.body;
 
