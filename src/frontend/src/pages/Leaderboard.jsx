@@ -30,27 +30,27 @@ const Leaderboard = () => {
         return () => { mounted = false; };
     }, []);
 
-    const socketRef = useSocket({ url: "http://localhost:3000", auth: apiKey });
+    // const socketRef = useSocket({ url: "http://localhost:3000", auth: apiKey });
 
-    useEffect(() => {
-        const socket = socketRef.current;
-        if (!socket) return;
+    // useEffect(() => {
+    //     const socket = socketRef.current;
+    //     if (!socket) return;
 
-        const onUpdate = (payload) => {
-            // adjust according to payload shape
-            if (Array.isArray(payload)) setRows(payload);
-            else {
-                setRows(prev => {
-                    const i = prev.findIndex(r => r.api_key === payload.api_key);
-                    if (i === -1) return [payload, ...prev];
-                    const next = [...prev]; next[i] = { ...next[i], ...payload }; return next;
-                });
-            }
-        };
+    //     const onUpdate = (payload) => {
+    //         // adjust according to payload shape
+    //         if (Array.isArray(payload)) setRows(payload);
+    //         else {
+    //             setRows(prev => {
+    //                 const i = prev.findIndex(r => r.api_key === payload.api_key);
+    //                 if (i === -1) return [payload, ...prev];
+    //                 const next = [...prev]; next[i] = { ...next[i], ...payload }; return next;
+    //             });
+    //         }
+    //     };
 
-        socket.on("scoreUpdated", onUpdate);
-        return () => socket.off("scoreUpdated", onUpdate);
-    }, [socketRef]);
+    //     socket.on("scoreUpdated", onUpdate);
+    //     return () => socket.off("scoreUpdated", onUpdate);
+    // }, [socketRef]);
 
     return (
         <div className="leaderboard-page">
