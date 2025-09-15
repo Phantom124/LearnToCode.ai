@@ -11,9 +11,9 @@ const http = require('http');
 const cors = require('cors');
 
 app.use(cors({
-    origin: 'http://localhost:5173', // or '*' for development
+    origin: 'http://localhost:5173',
     methods: ['GET','POST','PUT','DELETE','OPTIONS'],
-    credentials: true // set true if you send cookies/auth
+    credentials: true 
 }));
 
 const api_key = process.env.API_KEY;
@@ -173,7 +173,7 @@ app.post('/users/get_profile', async (req, res) => {
     }
 
     //db query
-    db.query('SELECT email, name, surname, user_level FROM users WHERE api_key = ?', [api_key], async(err, results) => {
+    db.query('SELECT email, name, surname, user_level, score FROM users WHERE api_key = ?', [api_key], async(err, results) => {
         if (err){
             return res.status(500).json({
                 status: "unsuccessful",
@@ -229,8 +229,7 @@ app.post('/users/update_profile', async (req, res) => {
                 data: null
             });
         }
-
-        // returning updated profile
+        
         db.query('SELECT email, name, surname, user_level FROM users WHERE api_key =?', [api_key], async(err, results) => {
             if (err || results.length === 0){
                 return res.status(500).json({

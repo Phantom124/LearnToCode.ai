@@ -37,7 +37,7 @@ const QuestionCard = ({ question, qNumber, total, onNext }) => {
                 api_key: getCookie("api_key"),
                 question: question.question,
                 user_answer: (question.type === "multiple-choice")? question.options[correctAnswer.answer-1] : correctAnswer.answer,
-                score_increment: 1,
+                score_increment: 100,
             }),
         }).then((res) => {
             if (!res.ok) {

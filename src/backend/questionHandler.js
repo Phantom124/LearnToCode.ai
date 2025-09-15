@@ -50,19 +50,19 @@ class QuestionSetHandler {
                 "starterCode": {
                 "[Language, e.g., 'Python']": "[Starter code block]"
             }
-            and please return this in a JSON structure, and only return the JSON. No other text. And please be creative with the questions `;
+            and please return this in a JSON structure, and only return the JSON. No other text. And please mix the order of the questions around. I don't want it necessary multiple choice then fill in the blank then code. `;
 
         try {
             const response = await this.genAI.models.generateContent({
-                model: "gemini-2.5-flash",
+                model: "gemini-2.5-pro",
                 contents: prompt,
-                config: {
-                    thinkingConfig: {
-                        thinkingBudget: 0,
-                    },
-                }
+                // config: {
+                //     thinkingConfig: {
+                //         thinkingBudget: 0,
+                //     },
+                // }
             });
-            // console.log(response.text);
+            console.log(response.text);
             return response.text;
         } catch (error) {
             const status = error?.status ?? error?.error?.code;

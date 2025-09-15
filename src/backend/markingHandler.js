@@ -25,7 +25,7 @@ class MarkingHandler{
         Please respond ONLY with a JSON object like:
         {"isCorrect": true/false, "score": 1/0, "feedback": "..."}`;
 
-        console.log("Prompt", prompt);
+        // console.log("Prompt", prompt);
 
         try{
             const response = await this.genAI.models.generateContent({
@@ -45,7 +45,7 @@ class MarkingHandler{
                 if (raw.startsWith('```')) {
                     raw = raw.replace(/```json|```/g, '').trim();
                 }
-                console.log("AI cleaned response:", raw);
+                // console.log("AI cleaned response:", raw);
                 marking = JSON.parse(raw);
             } catch (e) {
                 marking = {
