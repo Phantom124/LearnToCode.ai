@@ -313,7 +313,6 @@ app.post('/questions/get', async (req, res) => {
 
         context = new LevelContext(state, language); 
         qsh = new QuestionSetHandler(context);
-        // questions = 
 
         return res.status(200).json({
             status : "successful",
@@ -347,7 +346,7 @@ app.post('/users/mark_question', async(req, res) => {
     // validate answer
     const marker = new MarkingHandler();
     let marking;
-
+    console.log("User answer" + user_answer);
     try{
         marking = await marker.markQuestion(question, user_answer);
     }catch (error){

@@ -18,163 +18,163 @@ import Timer from "../components/Timer";
 
 const Practice = () => {
 
-    function getCookie(name) {
-    return document.cookie.split('; ').reduce((acc, pair) => {
-        const [k, v] = pair.split('=');
-        return k === encodeURIComponent(name) ? decodeURIComponent(v) : acc;
-    }, null);
-    }
+	function getCookie(name) {
+		return document.cookie.split('; ').reduce((acc, pair) => {
+			const [k, v] = pair.split('=');
+			return k === encodeURIComponent(name) ? decodeURIComponent(v) : acc;
+		}, null);
+	}
 
-    const [index, setIndex] = useState(0);
-    
-    const [loading, setLoading] = useState(false);
-    const [gameState, setGameState] = useState("start");
+	const [index, setIndex] = useState(0);
 
-    const languages = [
-        {id:1 ,name: "C++", logo: <img src={c} alt="C++ logo" /> },
-        {id:2 , name: "Python", logo: <img src={python} alt="Python logo" /> },
-        {id:3 , name: "JavaScript", logo: <img src={JavaScript} alt="JavaScript logo" /> },
-        {id:4 , name: "C#", logo: <img src={CSharp} alt="C# logo" /> },
-        {id:5 , name: "Ruby", logo: <img src={Ruby} alt="Ruby logo" /> },
-        {id:6 , name: "SQL", logo: <img src={sql} alt="SQL logo" /> },
-        {id:7 , name: "Java", logo: <img src={java} alt="Java logo" /> },
-    ];
+	const [loading, setLoading] = useState(false);
+	const [gameState, setGameState] = useState("start");
 
-    const handleIncrement = () => {
-        setIndex((i) => {
-        const next = i + 1;
-        if (next >= questions.length) {
-        setGameState("start");
-        return i; 
-        }
-        return next;
-    });
-    };
+	const languages = [
+		{ id: 1, name: "C++", logo: <img src={c} alt="C++ logo" /> },
+		{ id: 2, name: "Python", logo: <img src={python} alt="Python logo" /> },
+		{ id: 3, name: "JavaScript", logo: <img src={JavaScript} alt="JavaScript logo" /> },
+		{ id: 4, name: "C#", logo: <img src={CSharp} alt="C# logo" /> },
+		{ id: 5, name: "Ruby", logo: <img src={Ruby} alt="Ruby logo" /> },
+		{ id: 6, name: "SQL", logo: <img src={sql} alt="SQL logo" /> },
+		{ id: 7, name: "Java", logo: <img src={java} alt="Java logo" /> },
+	];
 
-
-    const [languageId, setLanguageId] = useState(1);
-
-    const selectedLang = languages.find(lang => lang.id === languageId);
-    
-    
-    const [questions, setQuestions] = useState([]);
-
-    const handleStart = () => {
-    setGameState("playing");
-    // setTimeLeft(30);
-    // setScore(0);
-    // setCurrentQuestion(0);
-    // setSelectedAnswer(null);
-  };
-  const getQuestions = () => {
-    // let q = questionss; // place holder for when i make api call
-    setQuestions(q);
-  }
-
-  useEffect(() => {
-  const langName = languages.find(lang => lang.id === languageId)?.name;
-
-  setLoading(true);
-  fetch("/api/questions/get", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      api_key: getCookie("api_key"),
-      language: langName,
-    }),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log("Data from API:", data);
-
-      let cleanData = data.data;
-
-      if (typeof cleanData === "string") {
-        try {
-          cleanData = cleanData
-            .replace(/```json/g, "")
-            .replace(/```/g, "")
-            .trim();
-          cleanData = JSON.parse(cleanData);
-        } catch (err) {
-          console.error("Failed to parse JSON string from API:", err);
-          cleanData = [];
-        }
-      }
-
-      setQuestions(cleanData);
-    })
-    .catch((error) => {
-      console.error("Error fetching questions:", error);
-      setQuestions([]);
-    }).finally(() => {
-        setLoading(false); // 🔹 unblock
-      });
-  }, [languageId]);
+	const handleIncrement = () => {
+		setIndex((i) => {
+			const next = i + 1;
+			if (next >= questions.length) {
+				setGameState("start");
+				return i;
+			}
+			return next;
+		});
+	};
 
 
-  console.log("howdy" + questions)
+	const [languageId, setLanguageId] = useState(1);
 
-    return (
-        <div className="practice">
-            <Sidebar/>
-            <section className="practice-section">
+	const selectedLang = languages.find(lang => lang.id === languageId);
 
-                <div className="language-selection">
-                    <label htmlFor="language-type">Select Language</label>
-                    <select
-                        data-game-state={gameState}
-                        onChange={(e) => setLanguageId(Number(e.target.value))}
-                        name="language-type"
-                        value={languageId}
-                    >
-                        {languages.map((lang) => (
-                            <option key={lang.id} value={lang.id}>
-                            {lang.name}
-                            </option>
-                        ))}
 
-                    </select>
-                    <div className="selected-language-logo">
-                        {selectedLang.logo}                      
-                    </div>
-                </div>
+	const [questions, setQuestions] = useState([]);
 
-                {gameState === "start" && <Start onStart={() => {
-                    handleStart();
-                    }}/>
-                }
+	const handleStart = () => {
+		setGameState("playing");
+		// setTimeLeft(30);
+		// setScore(0);
+		// setCurrentQuestion(0);
+		// setSelectedAnswer(null);
+	};
+	const getQuestions = () => {
+		let q = questionss || []; // place holder for when i make api call
+		setQuestions(q);
+	}
 
-                {gameState === "playing" && questions[index] && (
-                    <QuestionCard
-                        question={questions[index]}
-                        qNumber={index + 1}
-                        total={questions.length}
-                        onNext={handleIncrement}
-                    />
-                )}
+	useEffect(() => {
+		const langName = languages.find(lang => lang.id === languageId)?.name;
 
-                {/* {gameState === "end" && <GameOver/>} */}
+		setLoading(true);
+		fetch("api/questions/get", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				api_key: getCookie("api_key"),
+				language: langName,
+			}),
+		})
+			.then((response) => {
+				if (!response.ok) {
+					throw new Error("Network response was not ok");
+				} 
+				return response.json();
+			})
+			.then((data) => {
+				console.log("Data from API:", data);
 
-                {loading && (
-                <div className="loader-container">
-                    <p>AI Loading, give me about 20 seconds...</p>
-                    <ClipLoader size={40} color="#000" />
-                </div>
-                )}
+				let cleanData = data.data;
 
-                
-                
-            </section>
-        </div>
-    );
+				if (typeof cleanData === "string") {
+					try {
+						cleanData = cleanData
+							.replace(/```json/g, "")
+							.replace(/```/g, "")
+							.trim();
+						cleanData = JSON.parse(cleanData);
+					} catch (err) {
+						console.error("Failed to parse JSON string from API:", err);
+						cleanData = [];
+					}
+				}
+
+				setQuestions(cleanData);
+			})
+			.catch((error) => {
+				console.error("Error fetching questions:", error);
+				setQuestions([]);
+			}).finally(() => {
+				setLoading(false); // 🔹 unblock
+			});
+	}, [languageId]);
+
+
+	// console.log("howdy" + questions)
+
+	return (
+		<div className="practice">
+			<Sidebar />
+			<section className="practice-section">
+
+				<div className="language-selection">
+					<label htmlFor="language-type">Select Language</label>
+					<select
+						data-game-state={gameState}
+						onChange={(e) => setLanguageId(Number(e.target.value))}
+						name="language-type"
+						value={languageId}
+					>
+						{languages.map((lang) => (
+							<option key={lang.id} value={lang.id}>
+								{lang.name}
+							</option>
+						))}
+
+					</select>
+					<div className="selected-language-logo">
+						{selectedLang.logo}
+					</div>
+				</div>
+
+				{gameState === "start" && <Start onStart={() => {
+					handleStart();
+				}} />
+				}
+
+				{gameState === "playing" && questions[index] && (
+					<QuestionCard
+						question={questions[index]}
+						qNumber={index + 1}
+						total={questions.length}
+						onNext={handleIncrement}
+					/>
+				)}
+
+				{/* {gameState === "end" && <GameOver/>} */}
+
+				{loading && (
+					<div className="loader-container">
+						<p>AI Loading, give me about 20 seconds...</p>
+						<ClipLoader size={40} color="#000" />
+					</div>
+				)}
+
+
+
+			</section>
+		</div>
+	);
 };
 
 export default Practice;

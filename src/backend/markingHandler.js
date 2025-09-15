@@ -8,10 +8,11 @@ class MarkingHandler{
         this.genAI = new GoogleGenAI({apiKey: process.env.API_KEY});
     }
 
+    // Correct Answer: ${question.answer || question.expectedOutput}
+
     async markQuestion(question, user_answer){
-        const prompt = `Please consider the following quesiton and user's answer:
+        const prompt = `Please consider the following question and user's answer:
         Question: ${JSON.stringify(question)}
-        Correct Answer: ${question.answer || question.expectedOutput}
         
         And here is the user's answer:
         User Answer: ${user_answer}
@@ -23,6 +24,8 @@ class MarkingHandler{
         
         Please respond ONLY with a JSON object like:
         {"isCorrect": true/false, "score": 1/0, "feedback": "..."}`;
+
+        console.log("Prompt", prompt);
 
         try{
             const response = await this.genAI.models.generateContent({
